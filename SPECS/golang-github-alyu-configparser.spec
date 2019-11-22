@@ -23,6 +23,11 @@ License:        BSD
 URL:            %{gourl}
 Source0:        %{gosource}
 
+%if %{with check}
+# Tests
+BuildRequires:  perl-Digest-SHA
+%endif
+
 %description
 %{common_description}
 
