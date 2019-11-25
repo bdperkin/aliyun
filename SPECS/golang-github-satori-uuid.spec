@@ -14,7 +14,7 @@ UUID package for Go.}
 %global godocs          README.md
 
 Name:           %{goname}
-Version:        0
+Version:        1.2.1
 Release:        0.1%{?dist}
 Summary:        UUID package for Go
 
@@ -46,6 +46,6 @@ BuildRequires:  golang(gopkg.in/check.v1)
 %gopkgfiles
 
 %changelog
-* Mon Nov 25 16:35:48 UTC 2019 Brandon Perkins <bdperkin@gmail.com> - 0-0.1.20191125gitb2ce238
+* Mon Nov 25 16:35:48 UTC 2019 Brandon Perkins <bdperkin@gmail.com> - 1.2.1-0.1.20191125gitb2ce238
 - Initial package
 
