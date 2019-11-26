@@ -82,6 +82,12 @@ LDFLAGS="-X '%{goipath}/cli.Version=%{version}'"
 %gopkginstall
 install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
+for dir in bin cli oss; do
+  install -m 0755 -vd                   %{buildroot}%{_pkgdocdir}/$dir
+done
+for doc in %{godocs}; do
+  install -m 0644 -vp %{gobuilddir}/src/%{goipath}/$doc %{buildroot}%{_pkgdocdir}/$doc
+done
 
 %if %{with check}
 %check
@@ -90,8 +96,7 @@ install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 
 %files
 %license LICENSE
-%doc CHANGELOG.md README.md README-CN.md bin/README.md oss/README.md
-%doc oss/README-CN.md cli/README.md
+%doc %{_pkgdocdir}/*
 %{_bindir}/*
 
 %gopkgfiles
