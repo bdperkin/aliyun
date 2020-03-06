@@ -2,7 +2,7 @@
 
 # https://github.com/aliyun/credentials-go
 %global goipath         github.com/aliyun/credentials-go
-Version:                0.0.3
+Version:                0.0.1
 
 %gometa
 
@@ -49,9 +49,9 @@ BuildRequires:  golang(github.com/stretchr/testify/assert)
 %gopkgfiles
 
 %changelog
-* Wed Mar 04 16:40:57 EST 2020 Brandon Perkins <bperkins@redhat.com> - 0.0.3-1
+* Wed Mar 04 16:40:57 EST 2020 Brandon Perkins <bperkins@redhat.com> - 0.0.1-1
 - Enable check stage
-- Update to version 0.0.3
+- Update to version 0.0.1
 - Add golang(github.com/alibabacloud-go/tea/tea) BuildRequires
 
 * Fri Nov 22 16:07:30 UTC 2019 Brandon Perkins <bperkins@redhat.com> - 0-0.1.20191122gitc03d72d
