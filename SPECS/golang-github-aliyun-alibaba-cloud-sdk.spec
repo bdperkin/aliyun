@@ -14,7 +14,7 @@ Alibaba Cloud SDK for Go.}
                         README.md tools/document.md
 
 Name:           %{goname}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Alibaba Cloud SDK for Go
 
 # Upstream license specification: Apache-2.0
@@ -40,29 +40,20 @@ BuildRequires:  golang(github.com/stretchr/testify/assert)
 %prep
 %goprep
 
-%build
-for cmd in tools; do
-  %gobuild -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
-done
-
 %install
 %gopkginstall
-install -m 0755 -vd                     %{buildroot}%{_bindir}
-install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 
 %if %{with check}
 %check
 %gocheck
 %endif
 
-%files
-%license LICENSE
-%doc docs CONTRIBUTING.md ChangeLog.txt README-CN.md README.md tools/document.md
-%{_bindir}/*
-
 %gopkgfiles
 
 %changelog
+* Fri Mar 06 16:05:40 EST 2020 Brandon Perkins <bperkins@redhat.com> - 1.61.31-2
+- Remove build of tools binary example as this is a devel only package
+
 * Wed Mar 04 16:40:50 EST 2020 Brandon Perkins <bperkins@redhat.com> - 1.61.31-1
 - Update to version 1.61.31
 

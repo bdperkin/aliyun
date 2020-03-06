@@ -14,7 +14,7 @@ Getopt-like flags package for golang.}
 
 Name:           %{goname}
 Version:        0
-Release:        0.1%{?dist}
+Release:        0.2%{?dist}
 Summary:        Getopt-like flags package for golang
 
 # Upstream license specification: BSD-2-Clause
@@ -30,29 +30,20 @@ Source0:        %{gosource}
 %prep
 %goprep
 
-%build
-for cmd in test-program; do
-  %gobuild -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
-done
-
 %install
 %gopkginstall
-install -m 0755 -vd                     %{buildroot}%{_bindir}
-install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 
 %if %{with check}
 %check
 %gocheck
 %endif
 
-%files
-%license LICENSE
-%doc example README.md
-%{_bindir}/*
-
 %gopkgfiles
 
 %changelog
+* Fri Mar 06 16:05:40 EST 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.2.20200304git0b8effe
+- Remove build of test-program binary example as this is a devel only package
+
 * Wed Mar 04 16:41:20 EST 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.1.20200304git0b8effe
 - Enable check stage
 

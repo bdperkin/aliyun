@@ -14,7 +14,7 @@ Alibaba Cloud Debug function for Golang.}
 
 Name:           %{goname}
 Version:        0
-Release:        0.1%{?dist}
+Release:        0.2%{?dist}
 Summary:        Alibaba Cloud Debug function for Golang
 
 # Upstream license specification: Apache-2.0
@@ -30,27 +30,20 @@ Source0:        %{gosource}
 %prep
 %goprep
 
-%build
-%gobuild -o %{gobuilddir}/bin/debug %{goipath}
-
 %install
 %gopkginstall
-install -m 0755 -vd                     %{buildroot}%{_bindir}
-install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 
 %if %{with check}
 %check
 %gocheck
 %endif
 
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/*
-
 %gopkgfiles
 
 %changelog
+* Fri Mar 06 16:05:40 EST 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.2.20200304git9472017
+- Remove build of debug binary example as this is a devel only package
+
 * Wed Mar 04 16:40:37 EST 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.1.20200304git9472017
 - Enable check stage
 - Add common_description and Summary

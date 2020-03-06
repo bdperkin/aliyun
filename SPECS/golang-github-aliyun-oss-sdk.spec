@@ -12,7 +12,7 @@ Aliyun OSS SDK for Go.}
 %global godocs          CHANGELOG.md README-CN.md README.md
 
 Name:           %{goname}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Aliyun OSS SDK for Go
 
 License:        ASL 2.0
@@ -36,26 +36,20 @@ BuildRequires:  golang(gopkg.in/check.v1)
 %prep
 %goprep
 
-%build
-%gobuild -o %{gobuilddir}/bin/aliyun-oss-go-sdk %{goipath}
-
 %install
 %gopkginstall
-install -m 0755 -vd                     %{buildroot}%{_bindir}
-install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 
 %if %{with check}
 %check
 %gocheck
 %endif
 
-%files
-%doc CHANGELOG.md README-CN.md README.md
-%{_bindir}/*
-
 %gopkgfiles
 
 %changelog
+* Fri Mar 06 16:05:40 EST 2020 Brandon Perkins <bperkins@redhat.com> - 2.0.6-2
+- Remove build of aliyun-oss-go-sdk binary example as this is a devel only package
+
 * Wed Mar 04 16:41:05 EST 2020 Brandon Perkins <bperkins@redhat.com> - 2.0.6-1
 - Update to version 2.0.6
 - Added ASL 2.0 License
