@@ -26,7 +26,7 @@ Alibaba Cloud CLI.}
                         cli/README.md oss/README-CN.md oss/README.md
 
 Name:           %{goname}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Alibaba Cloud CLI
 
 # Upstream license specification: Apache-2.0
@@ -52,6 +52,8 @@ BuildRequires:  golang(github.com/satori/go.uuid)(commit=b2ce2384e17bbe0c6d34077
 BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb)
 BuildRequires:  golang(gopkg.in/ini.v1)
 BuildRequires:  golang(gopkg.in/yaml.v2)
+BuildRequires:  help2man
+BuildRequires:  gzip
 
 %if %{with check}
 # Tests
@@ -76,11 +78,16 @@ go-bindata -o resource/metas.go -pkg resource -prefix %{gometaabs} %{gometaabs}/
 %build
 LDFLAGS="-X '%{goipath}/cli.Version=%{version}'" 
 %gobuild -o %{gobuilddir}/bin/aliyun %{goipath}/main
+mkdir -p %{gobuilddir}/share/man/man1
+help2man -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man1/aliyun.1 -N --version-string="%{version}" %{gobuilddir}/bin/aliyun
+gzip %{gobuilddir}/share/man/man1/aliyun.1
 
 %install
 %gopkginstall
 install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
+install -m 0755 -vd                                %{buildroot}%{_mandir}/man1
+install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 for dir in bin cli oss; do
   install -m 0755 -vd                   %{buildroot}%{_pkgdocdir}/$dir
 done
@@ -96,11 +103,15 @@ done
 %files
 %license LICENSE
 %doc %{_pkgdocdir}/*
+%{_mandir}/man1/aliyun.1*
 %{_bindir}/*
 
 %gopkgfiles
 
 %changelog
+* Fri Mar 06 16:46:31 EST 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.36-2
+- Add man page
+
 * Wed Mar 04 16:40:55 EST 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.36-1
 - Update to aliyun-cli to version 3.0.36
 - Update to aliyun-openapi-meta to commit
