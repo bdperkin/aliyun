@@ -1,8 +1,8 @@
-%bcond_with check
+%bcond_without check
 
 # https://github.com/aliyun/credentials-go
 %global goipath         github.com/aliyun/credentials-go
-Version:                0.0.1
+Version:                1.1.0
 
 %gometa
 
@@ -10,10 +10,10 @@ Version:                0.0.1
 Alibaba Cloud Credentials for Go.}
 
 %global golicenses      LICENSE
-%global godocs          CONTRIBUTING.md README-CN.md README.md
+%global godocs          CONTRIBUTING.md README.md README-CN.md
 
 Name:           %{goname}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Alibaba Cloud Credentials for Go
 
 # Upstream license specification: Apache-2.0
@@ -21,7 +21,10 @@ License:        ASL 2.0
 URL:            %{gourl}
 Source0:        %{gosource}
 
+Patch0:         credentials-go-tests.patch
+
 BuildRequires:  golang(github.com/alibabacloud-go/debug/debug)
+BuildRequires:  golang(github.com/alibabacloud-go/tea/tea)
 BuildRequires:  golang(gopkg.in/ini.v1)
 
 %if %{with check}
@@ -36,6 +39,8 @@ BuildRequires:  golang(github.com/stretchr/testify/assert)
 
 %prep
 %goprep
+# https://github.com/aliyun/credentials-go/pull/22
+%patch0 -p1
 
 %install
 %gopkginstall
@@ -48,9 +53,13 @@ BuildRequires:  golang(github.com/stretchr/testify/assert)
 %gopkgfiles
 
 %changelog
+* Wed Jul 29 2020 Brandon Perkins <bperkins@redhat.com> - 1.1.0-1
+- Update to version 1.1.0 (#1811177)
+- Enable check stage
+- Include patch for https://github.com/aliyun/credentials-go/pull/22
+
 * Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 0.0.1-2
 - Update to release 2 (#1811177)
-- Remove golang(github.com/alibabacloud-go/tea/tea) BuildRequires
 - Clean changelog
 
 * Wed Mar 04 2020 Brandon Perkins <bperkins@redhat.com> - 0.0.1-1
