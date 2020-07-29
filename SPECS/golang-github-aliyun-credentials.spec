@@ -13,7 +13,7 @@ Alibaba Cloud Credentials for Go.}
 %global godocs          CONTRIBUTING.md README-CN.md README.md
 
 Name:           %{goname}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Alibaba Cloud Credentials for Go
 
 # Upstream license specification: Apache-2.0
@@ -22,7 +22,6 @@ URL:            %{gourl}
 Source0:        %{gosource}
 
 BuildRequires:  golang(github.com/alibabacloud-go/debug/debug)
-BuildRequires:  golang(github.com/alibabacloud-go/tea/tea)
 BuildRequires:  golang(gopkg.in/ini.v1)
 
 %if %{with check}
@@ -49,11 +48,16 @@ BuildRequires:  golang(github.com/stretchr/testify/assert)
 %gopkgfiles
 
 %changelog
-* Wed Mar 04 16:40:57 EST 2020 Brandon Perkins <bperkins@redhat.com> - 0.0.1-1
-- Enable check stage
+* Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 0.0.1-2
+- Update to release 2 (#1811177)
+- Remove golang(github.com/alibabacloud-go/tea/tea) BuildRequires
+- Clean changelog
+
+* Wed Mar 04 2020 Brandon Perkins <bperkins@redhat.com> - 0.0.1-1
+- Disable check stage
 - Update to version 0.0.1
 - Add golang(github.com/alibabacloud-go/tea/tea) BuildRequires
 
-* Fri Nov 22 16:07:30 UTC 2019 Brandon Perkins <bperkins@redhat.com> - 0-0.1.20191122gitc03d72d
+* Fri Nov 22 2019 Brandon Perkins <bperkins@redhat.com> - 0-0.1.20191122gitc03d72d
 - Initial package
 

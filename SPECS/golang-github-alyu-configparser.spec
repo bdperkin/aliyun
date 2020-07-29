@@ -1,4 +1,4 @@
-%bcond_with check
+%bcond_without check
 
 # https://github.com/alyu/configparser
 %global goipath         github.com/alyu/configparser
@@ -14,13 +14,18 @@ Config ini file parser in Go.}
 
 Name:           %{goname}
 Version:        0
-Release:        0.1%{?dist}
+Release:        0.2%{?dist}
 Summary:        Config ini file parser in Go
 
 # Upstream license specification: BSD-3-Clause
 License:        BSD
 URL:            %{gourl}
 Source0:        %{gosource}
+
+%if %{with check}
+# Tests
+BuildRequires:  perl-Digest-SHA
+%endif
 
 %description
 %{common_description}
@@ -41,10 +46,11 @@ Source0:        %{gosource}
 %gopkgfiles
 
 %changelog
-* Wed Mar 04 16:41:19 EST 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.1.20200304git744e9a6
+* Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.2.20200728git744e9a6
+- Update to release 2 of git commit 744e9a6 (#1811179)
 - Enable check stage
-- Remove perl-Digest-SHA BuildRequires for tests
+- Clean changelog
 
-* Fri Nov 22 16:20:17 UTC 2019 Brandon Perkins <bperkins@redhat.com> - 0-0.1.20191122git744e9a6
+* Fri Nov 22 2019 Brandon Perkins <bperkins@redhat.com> - 0-0.1.20191122git744e9a6
 - Initial package
 

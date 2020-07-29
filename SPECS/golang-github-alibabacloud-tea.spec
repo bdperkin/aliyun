@@ -1,8 +1,8 @@
-%bcond_with check
+%bcond_without check
 
 # https://github.com/alibabacloud-go/tea
 %global goipath         github.com/alibabacloud-go/tea
-Version:                0.0.7
+Version:                1.1.7
 
 %gometa
 
@@ -43,6 +43,11 @@ BuildRequires:  golang(golang.org/x/net/proxy)
 %gopkgfiles
 
 %changelog
-* Thu Mar 05 11:09:50 EST 2020 Brandon Perkins <bperkins@redhat.com> - 0.0.7-1
+* Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 1.1.7-1
+- Update to version 1.1.7 (#1811174)
+- Enable check stage
+- Clean changelog
+
+* Thu Mar 05 2020 Brandon Perkins <bperkins@redhat.com> - 0.0.7-1
 - Initial package
 

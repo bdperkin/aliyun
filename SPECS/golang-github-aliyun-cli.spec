@@ -1,13 +1,15 @@
 %bcond_with check
 
+%global _hardened_build 1
+
 # https://github.com/aliyun/aliyun-cli
 %global goipath         github.com/aliyun/aliyun-cli
-Version:                3.0.36
+Version:                3.0.54
 
 # https://github.com/aliyun/aliyun-openapi-meta
 %global gometarepo      aliyun-openapi-meta
 %global gometaipath     github.com/aliyun/%{gometarepo}
-%global metacommit      3e9d6a741c5029c92f6447e4137a6531f037a931
+%global metacommit      73a3ade39a109bda00ae3a80585fac98b3f3dd70
 %global gometaname      golang-github-%{gometarepo}
 %global gometaversion   0
 %global gometarelease   0.1%{?dist}
@@ -26,7 +28,7 @@ Alibaba Cloud CLI.}
                         cli/README.md oss/README-CN.md oss/README.md
 
 Name:           %{goname}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Alibaba Cloud CLI
 
 # Upstream license specification: Apache-2.0
@@ -48,7 +50,6 @@ BuildRequires:  golang(github.com/alyu/configparser)
 BuildRequires:  golang(github.com/droundy/goopt)
 BuildRequires:  golang(github.com/jmespath/go-jmespath)
 BuildRequires:  golang(github.com/posener/complete)
-BuildRequires:  golang(github.com/satori/go.uuid)(commit=b2ce2384e17bbe0c6d34077efa39dbab3e09123b)
 BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb)
 BuildRequires:  golang(gopkg.in/ini.v1)
 BuildRequires:  golang(gopkg.in/yaml.v2)
@@ -79,7 +80,7 @@ go-bindata -o resource/metas.go -pkg resource -prefix %{gometaabs} %{gometaabs}/
 LDFLAGS="-X '%{goipath}/cli.Version=%{version}'" 
 %gobuild -o %{gobuilddir}/bin/aliyun %{goipath}/main
 mkdir -p %{gobuilddir}/share/man/man1
-help2man -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man1/aliyun.1 -N --version-string="%{version}" %{gobuilddir}/bin/aliyun
+help2man --no-discard-stderr -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man1/aliyun.1 -N --version-string="%{version}" %{gobuilddir}/bin/aliyun
 gzip %{gobuilddir}/share/man/man1/aliyun.1
 
 %install
@@ -109,14 +110,24 @@ done
 %gopkgfiles
 
 %changelog
-* Fri Mar 06 16:46:31 EST 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.36-2
+* Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.54-1
+- Update to version 3.0.54 (#1811183)
+- Explicitly harden package
+- Update to aliyun-openapi-meta to commit
+  73a3ade39a109bda00ae3a80585fac98b3f3dd70
+- Remove golang(github.com/satori/go.uuid)
+  (commit=b2ce2384e17bbe0c6d34077efa39dbab3e09123b) BuildRequires
+- Fix man page generation
+- Clean changelog
+
+* Fri Mar 06 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.36-2
 - Add man page
 
-* Wed Mar 04 16:40:55 EST 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.36-1
+* Wed Mar 04 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.36-1
 - Update to aliyun-cli to version 3.0.36
 - Update to aliyun-openapi-meta to commit
   3e9d6a741c5029c92f6447e4137a6531f037a931
 
-* Fri Nov 22 15:32:08 UTC 2019 Brandon Perkins <bperkins@redhat.com> - 3.0.30-1
+* Fri Nov 22 2019 Brandon Perkins <bperkins@redhat.com> - 3.0.30-1
 - Initial package
 
