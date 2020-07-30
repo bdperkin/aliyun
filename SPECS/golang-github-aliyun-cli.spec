@@ -1,41 +1,38 @@
-%bcond_with check
+%bcond_without check
 
 %global _hardened_build 1
 
 # https://github.com/aliyun/aliyun-cli
-%global goipath         github.com/aliyun/aliyun-cli
+%global goipath0        github.com/aliyun/aliyun-cli
 Version:                3.0.54
 
 # https://github.com/aliyun/aliyun-openapi-meta
+%global goipath1        github.com/aliyun/aliyun-openapi-meta
+%global version1        0
+%global commit1         73a3ade39a109bda00ae3a80585fac98b3f3dd70
 %global gometarepo      aliyun-openapi-meta
-%global gometaipath     github.com/aliyun/%{gometarepo}
-%global metacommit      73a3ade39a109bda00ae3a80585fac98b3f3dd70
-%global gometaname      golang-github-%{gometarepo}
-%global gometaversion   0
-%global gometarelease   0.1%{?dist}
-%global gometasummary   Aliyun OpenAPI Meta Data
-%global gometaurl       https://%{gometaipath}
-%global gometadir       %{gometarepo}-%{metacommit}
-%global gometasource    %{gometadir}.tar.gz
+%global gometadir       %{gometarepo}-%{commit1}
 
-%gometa
+%gometa -a
 
 %global common_description %{expand:
 Alibaba Cloud CLI.}
 
 %global golicenses      LICENSE
-%global godocs          CHANGELOG.md README-CN.md README.md bin/README.md\\\
-                        cli/README.md oss/README-CN.md oss/README.md
+%global godocs          CHANGELOG.md README-CN.md README.md README-bin.md\\\
+                        README-cli.md README-CN-oss.md README-oss.md
 
 Name:           %{goname}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Alibaba Cloud CLI
 
 # Upstream license specification: Apache-2.0
 License:        ASL 2.0
 URL:            %{gourl}
-Source0:        %{gosource}
-Source1:        %{gometasource}
+Source0:        %{gosource0}
+Source1:        %{gosource1}
+
+Patch0:         aliyun-cli-get-access-key-secret.patch
 
 BuildRequires:  go-bindata
 BuildRequires:  golang(github.com/aliyun/alibaba-cloud-sdk-go/sdk)
@@ -54,7 +51,6 @@ BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb)
 BuildRequires:  golang(gopkg.in/ini.v1)
 BuildRequires:  golang(gopkg.in/yaml.v2)
 BuildRequires:  help2man
-BuildRequires:  gzip
 
 %if %{with check}
 # Tests
@@ -72,16 +68,21 @@ BuildRequires:  golang(gopkg.in/check.v1)
 %prep
 %setup -D -T -b 1 -n %{gometadir} -q
 %goprep
-cd %{gobuilddir}/src/%{goipath}
-%define gometaabs       %{_builddir}/%{gometadir}
+mv bin/README.md README-bin.md
+mv cli/README.md README-cli.md
+mv oss/README-CN.md README-CN-oss.md
+mv oss/README.md README-oss.md
+cd %{gobuilddir}/src/%{goipath0}
+%global gometaabs       %{_builddir}/%{gometadir}
 go-bindata -o resource/metas.go -pkg resource -prefix %{gometaabs} %{gometaabs}/...
+# 
+%patch0 -p1
 
 %build
-LDFLAGS="-X '%{goipath}/cli.Version=%{version}'" 
-%gobuild -o %{gobuilddir}/bin/aliyun %{goipath}/main
+LDFLAGS="-X '%{goipath0}/cli.Version=%{version}'" 
+%gobuild -o %{gobuilddir}/bin/aliyun %{goipath0}/main
 mkdir -p %{gobuilddir}/share/man/man1
 help2man --no-discard-stderr -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man1/aliyun.1 -N --version-string="%{version}" %{gobuilddir}/bin/aliyun
-gzip %{gobuilddir}/share/man/man1/aliyun.1
 
 %install
 %gopkginstall
@@ -89,12 +90,6 @@ install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 install -m 0755 -vd                                %{buildroot}%{_mandir}/man1
 install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
-for dir in bin cli oss; do
-  install -m 0755 -vd                   %{buildroot}%{_pkgdocdir}/$dir
-done
-for doc in %{godocs}; do
-  install -m 0644 -vp %{gobuilddir}/src/%{goipath}/$doc %{buildroot}%{_pkgdocdir}/$doc
-done
 
 %if %{with check}
 %check
@@ -110,6 +105,12 @@ done
 %gopkgfiles
 
 %changelog
+* Wed Jul 29 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.54-2
+- Enable check stage
+- Rename godocs in subdirectories
+- Remove explicit gzip of man page
+- Change gometaabs from define to global
+
 * Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.54-1
 - Update to version 3.0.54 (#1811183)
 - Explicitly harden package
