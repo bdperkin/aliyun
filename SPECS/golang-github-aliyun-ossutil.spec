@@ -1,10 +1,11 @@
-%bcond_with check
+%bcond_without check
 
 %global _hardened_build 1
 
 # https://github.com/aliyun/ossutil
 %global goipath         github.com/aliyun/ossutil
 Version:                1.6.18
+%global tag             1.6.18
 
 %gometa
 
@@ -15,7 +16,7 @@ A user friendly command line tool to access AliCloud OSS.}
 %global godocs          CHANGELOG.md README-CN.md README.md
 
 Name:           %{goname}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A user friendly command line tool to access AliCloud OSS
 
 License:        MIT
@@ -27,7 +28,6 @@ BuildRequires:  golang(github.com/alyu/configparser)
 BuildRequires:  golang(github.com/droundy/goopt)
 BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb)
 BuildRequires:  help2man
-BuildRequires:  gzip
 
 %if %{with check}
 # Tests
@@ -46,7 +46,6 @@ BuildRequires:  golang(gopkg.in/check.v1)
 %gobuild -o %{gobuilddir}/bin/ossutil %{goipath}
 mkdir -p %{gobuilddir}/share/man/man1
 help2man --no-discard-stderr -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man1/ossutil.1 -N --version-string="%{version}" %{gobuilddir}/bin/ossutil
-gzip %{gobuilddir}/share/man/man1/ossutil.1
 
 %install
 %gopkginstall
@@ -69,6 +68,11 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %gopkgfiles
 
 %changelog
+* Wed Jul 29 2020 Brandon Perkins <bperkins@redhat.com> - 1.6.18-2
+- Enable check stage
+- Add version tag
+- Remove explicit gzip of man page
+
 * Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 1.6.18-1
 - Update to version 1.6.18 (#1811182)
 - Explicitly harden package
