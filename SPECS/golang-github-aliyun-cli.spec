@@ -32,7 +32,7 @@ URL:            %{gourl}
 Source0:        %{gosource0}
 Source1:        %{gosource1}
 
-Patch0:         aliyun-cli-get-access-key-secret.patch
+Patch0:         aliyun-cli-credentials-config.patch
 
 BuildRequires:  go-bindata
 BuildRequires:  golang(github.com/aliyun/alibaba-cloud-sdk-go/sdk)
@@ -70,8 +70,8 @@ BuildRequires:  golang(gopkg.in/check.v1)
 %goprep
 mv bin/README.md README-bin.md
 mv cli/README.md README-cli.md
-mv oss/README-CN.md README-CN-oss.md
 mv oss/README.md README-oss.md
+mv oss/README-CN.md README-CN-oss.md
 cd %{gobuilddir}/src/%{goipath0}
 %global gometaabs       %{_builddir}/%{gometadir}
 go-bindata -o resource/metas.go -pkg resource -prefix %{gometaabs} %{gometaabs}/...
