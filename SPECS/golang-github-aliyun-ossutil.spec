@@ -56,7 +56,8 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 
 %if %{with check}
 %check
-%gocheck
+# Skip 'lib' tests due to need for credentials
+%gocheck -d 'lib'
 %endif
 
 %files
@@ -70,6 +71,7 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %changelog
 * Wed Jul 29 2020 Brandon Perkins <bperkins@redhat.com> - 1.6.18-2
 - Enable check stage
+- Disable 'lib' tests due to need for credentials
 - Add version tag
 - Remove explicit gzip of man page
 
