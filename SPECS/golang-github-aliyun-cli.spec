@@ -23,7 +23,7 @@ Alibaba Cloud CLI.}
                         README-cli.md README-CN-oss.md README-oss.md
 
 Name:           %{goname}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Alibaba Cloud CLI
 
 # Upstream license specification: Apache-2.0
@@ -85,7 +85,8 @@ mkdir -p %{gobuilddir}/share/man/man1
 help2man --no-discard-stderr -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man1/aliyun.1 -N --version-string="%{version}" %{gobuilddir}/bin/aliyun
 
 %install
-%gopkginstall
+%godevelinstall -z 0
+%goaltinstall   -z 0
 install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 install -m 0755 -vd                                %{buildroot}%{_mandir}/man1
@@ -105,6 +106,10 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %gopkgfiles
 
 %changelog
+* Fri Jul 31 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.54-3
+- Patch to build against golang-github-aliyun-credentials-1.1.0
+- Only do package install of aliyun-cli and not aliyun-openapi-meta
+
 * Wed Jul 29 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.54-2
 - Enable check stage
 - Rename godocs in subdirectories
