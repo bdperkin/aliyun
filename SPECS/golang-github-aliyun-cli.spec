@@ -1,4 +1,4 @@
-%bcond_without check
+%bcond_with check
 
 %global _hardened_build 1
 
@@ -75,7 +75,7 @@ mv oss/README-CN.md README-CN-oss.md
 cd %{gobuilddir}/src/%{goipath0}
 %global gometaabs       %{_builddir}/%{gometadir}
 go-bindata -o resource/metas.go -pkg resource -prefix %{gometaabs} %{gometaabs}/...
-# 
+# https://github.com/aliyun/aliyun-cli/pull/300
 %patch0 -p1
 
 %build
@@ -86,7 +86,6 @@ help2man --no-discard-stderr -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man
 
 %install
 %godevelinstall -z 0
-%goaltinstall   -z 0
 install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 install -m 0755 -vd                                %{buildroot}%{_mandir}/man1
@@ -108,7 +107,6 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %changelog
 * Fri Jul 31 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.54-3
 - Patch to build against golang-github-aliyun-credentials-1.1.0
-- Only do package install of aliyun-cli and not aliyun-openapi-meta
 
 * Wed Jul 29 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.54-2
 - Enable check stage
