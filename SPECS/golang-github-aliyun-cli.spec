@@ -15,6 +15,8 @@ Version:                3.0.54
 
 %gometa -a
 
+%global _docdir_fmt     %{name}
+
 %global common_description %{expand:
 Alibaba Cloud CLI.}
 
@@ -66,7 +68,6 @@ BuildRequires:  golang(gopkg.in/check.v1)
 %gopkg
 
 %prep
-%setup -D -T -b 1 -n %{gometadir} -q
 %goprep
 mv bin/README.md README-bin.md
 mv cli/README.md README-cli.md
@@ -79,6 +80,7 @@ go-bindata -o resource/metas.go -pkg resource -prefix %{gometaabs} %{gometaabs}/
 %patch0 -p1
 
 %build
+%goenv -z 0
 LDFLAGS="-X '%{goipath0}/cli.Version=%{version}'" 
 %gobuild -o %{gobuilddir}/bin/aliyun %{goipath0}/main
 mkdir -p %{gobuilddir}/share/man/man1
@@ -98,11 +100,12 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 
 %files
 %license LICENSE
-%doc %{_pkgdocdir}/*
+%doc CHANGELOG.md README-CN.md README.md README-bin.md README-cli.md
+%doc README-CN-oss.md README-oss.md
 %{_mandir}/man1/aliyun.1*
 %{_bindir}/*
 
-%gopkgfiles
+%godevelfiles -z 0
 
 %changelog
 * Fri Jul 31 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.54-3
