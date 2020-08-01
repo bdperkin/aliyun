@@ -2,7 +2,7 @@
 
 # https://github.com/aliyun/credentials-go
 %global goipath         github.com/aliyun/credentials-go
-Version:                1.1.0
+Version:                1.1.1
 
 %gometa
 
@@ -21,8 +21,6 @@ License:        ASL 2.0
 URL:            %{gourl}
 Source0:        %{gosource}
 
-Patch0:         credentials-go-tests.patch
-
 BuildRequires:  golang(github.com/alibabacloud-go/debug/debug)
 BuildRequires:  golang(github.com/alibabacloud-go/tea/tea)
 BuildRequires:  golang(gopkg.in/ini.v1)
@@ -39,8 +37,6 @@ BuildRequires:  golang(github.com/stretchr/testify/assert)
 
 %prep
 %goprep
-# https://github.com/aliyun/credentials-go/pull/22
-%patch0 -p1
 
 %install
 %gopkginstall
@@ -53,6 +49,10 @@ BuildRequires:  golang(github.com/stretchr/testify/assert)
 %gopkgfiles
 
 %changelog
+* Fri Jul 31 2020 Brandon Perkins <bperkins@redhat.com> - 1.1.1-1
+- Update to version 1.1.1 (#1811177)
+- Remove patch for fixed https://github.com/aliyun/credentials-go/pull/22
+
 * Wed Jul 29 2020 Brandon Perkins <bperkins@redhat.com> - 1.1.0-1
 - Update to version 1.1.0 (#1811177)
 - Enable check stage
