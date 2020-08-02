@@ -4,12 +4,12 @@
 
 # https://github.com/aliyun/aliyun-cli
 %global goipath0        github.com/aliyun/aliyun-cli
-Version:                3.0.54
+Version:                3.0.55
 
 # https://github.com/aliyun/aliyun-openapi-meta
 %global goipath1        github.com/aliyun/aliyun-openapi-meta
 %global version1        0
-%global commit1         73a3ade39a109bda00ae3a80585fac98b3f3dd70
+%global commit1         fb1de10319cf130af8945963ef6659707b5f04b7
 %global gometarepo      aliyun-openapi-meta
 %global gometadir       %{gometarepo}-%{commit1}
 
@@ -17,16 +17,22 @@ Version:                3.0.54
 
 %global _docdir_fmt     %{name}
 
+%global godevelsummary0 Alibaba Cloud CLI
+%global godevelsummary1 Aliyun OpenAPI Meta Data
+
 %global common_description %{expand:
 Alibaba Cloud CLI.}
 
-%global golicenses      LICENSE
-%global godocs          CHANGELOG.md README-CN.md README.md README-bin.md\\\
+%global golicenses0     LICENSE
+%global godocs0         CHANGELOG.md README-CN.md README.md README-bin.md\\\
                         README-cli.md README-CN-oss.md README-oss.md
 
+%global golicenses1     LICENSE
+%global godocs1         README.md
+
 Name:           %{goname}
-Release:        3%{?dist}
-Summary:        Alibaba Cloud CLI
+Release:        1%{?dist}
+Summary:        %{godevelsummary0}
 
 # Upstream license specification: Apache-2.0
 License:        ASL 2.0
@@ -68,30 +74,32 @@ BuildRequires:  golang(gopkg.in/check.v1)
 %gopkg
 
 %prep
-%goprep
+%goprep -z 1
+%goprep -z 0
+# https://github.com/aliyun/aliyun-cli/pull/300
+%patch0 -p1
 mv bin/README.md README-bin.md
 mv cli/README.md README-cli.md
 mv oss/README.md README-oss.md
 mv oss/README-CN.md README-CN-oss.md
-cd %{gobuilddir}/src/%{goipath0}
+pushd %{gobuilddir}/src/%{goipath0}
 %global gometaabs       %{_builddir}/%{gometadir}
 go-bindata -o resource/metas.go -pkg resource -prefix %{gometaabs} %{gometaabs}/...
-# https://github.com/aliyun/aliyun-cli/pull/300
-%patch0 -p1
+popd
 
 %build
-%goenv -z 0
 LDFLAGS="-X '%{goipath0}/cli.Version=%{version}'" 
 %gobuild -o %{gobuilddir}/bin/aliyun %{goipath0}/main
 mkdir -p %{gobuilddir}/share/man/man1
-help2man --no-discard-stderr -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man1/aliyun.1 -N --version-string="%{version}" %{gobuilddir}/bin/aliyun
+help2man --no-discard-stderr -n "%{godevelsummary0}" -s 1 -o %{gobuilddir}/share/man/man1/aliyun.1 -N --version-string="%{version}" %{gobuilddir}/bin/aliyun
 
 %install
-%godevelinstall -z 0
+%gopkginstall
 install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 install -m 0755 -vd                                %{buildroot}%{_mandir}/man1
 install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
+%global buildsubdir %{gometadir}/_build/src/%{goipath0}
 
 %if %{with check}
 %check
@@ -105,9 +113,21 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %{_mandir}/man1/aliyun.1*
 %{_bindir}/*
 
-%godevelfiles -z 0
+%gopkgfiles
 
 %changelog
+* Sat Aug 01 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.55-1
+- Update to version 3.0.55 (#1811183)
+- Disable check stage temporarily
+- Update to aliyun-openapi-meta to commit
+  fb1de10319cf130af8945963ef6659707b5f04b7
+- Add godevelsummary, golicenses, and godocs for all sources
+- Reorder goprep and patch operations
+- Remove goenv before gobuild
+- Explicitly set man page summary
+- Use standard gopkginstall and gopkgfiles
+- Properly generate debugsourcefiles.list
+
 * Fri Jul 31 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.54-3
 - Patch to build against golang-github-aliyun-credentials-1.1.0
 
