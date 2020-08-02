@@ -7,15 +7,15 @@
 %gometa
 
 %global common_description %{expand:
-Aliyun OpenAPI Meta Data.}
+Alibaba Cloud (Aliyun) OpenAPI Meta Data.}
 
 %global golicenses      LICENSE
 %global godocs          README.md
 
 Name:           %{goname}
 Version:        0
-Release:        0.1%{?dist}
-Summary:        Aliyun OpenAPI Meta Data
+Release:        0.2%{?dist}
+Summary:        Alibaba Cloud (Aliyun) OpenAPI Meta Data
 
 # Upstream license specification: Apache-2.0
 License:        ASL 2.0
@@ -41,6 +41,9 @@ Source0:        %{gosource}
 %gopkgfiles
 
 %changelog
+* Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.2
+- Update summary and description for clarity and consistency
+
 * Fri Jul 31 19:06:44 EDT 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.1.20200731gitfb1de10
 - Initial package
 

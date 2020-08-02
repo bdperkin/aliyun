@@ -17,11 +17,11 @@ Version:                3.0.55
 
 %global _docdir_fmt     %{name}
 
-%global godevelsummary0 Alibaba Cloud CLI
-%global godevelsummary1 Aliyun OpenAPI Meta Data
+%global godevelsummary0 Alibaba Cloud (Aliyun) CLI
+%global godevelsummary1 Alibaba Cloud (Aliyun) OpenAPI Meta Data
 
 %global common_description %{expand:
-Alibaba Cloud CLI.}
+Alibaba Cloud (Aliyun) CLI.}
 
 %global golicenses0     LICENSE
 %global godocs0         CHANGELOG.md README-CN.md README.md README-bin.md\\\
@@ -31,7 +31,7 @@ Alibaba Cloud CLI.}
 %global godocs1         README.md
 
 Name:           %{goname}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        %{godevelsummary0}
 
 # Upstream license specification: Apache-2.0
@@ -116,6 +116,9 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %gopkgfiles
 
 %changelog
+* Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.55-3
+- Update summary and description for clarity and consistency
+
 * Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.55-2
 - Reenable check stage
 - Disable 'openapi' tests due to only being used by meta

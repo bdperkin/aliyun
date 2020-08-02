@@ -7,15 +7,15 @@
 %gometa
 
 %global common_description %{expand:
-Config ini file parser in Go.}
+Alibaba Cloud (Aliyun) INI configuration file parser for Go.}
 
 %global golicenses      LICENSE
 %global godocs          README.md
 
 Name:           %{goname}
 Version:        0
-Release:        0.2%{?dist}
-Summary:        Config ini file parser in Go
+Release:        0.3%{?dist}
+Summary:        Alibaba Cloud (Aliyun) INI configuration file parser for Go
 
 # Upstream license specification: BSD-3-Clause
 License:        BSD
@@ -46,6 +46,9 @@ BuildRequires:  perl-Digest-SHA
 %gopkgfiles
 
 %changelog
+* Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.3
+- Update summary and description for clarity and consistency
+
 * Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.2.20200728git744e9a6
 - Update to release 2 of git commit 744e9a6 (#1811179)
 - Enable check stage

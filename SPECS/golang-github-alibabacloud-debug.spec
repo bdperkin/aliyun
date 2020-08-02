@@ -7,15 +7,15 @@
 %gometa
 
 %global common_description %{expand:
-Alibaba Cloud Debug function for Golang.}
+Alibaba Cloud (Aliyun) Debug function for Go.}
 
 %global golicenses      LICENSE
 %global godocs          README.md
 
 Name:           %{goname}
 Version:        0
-Release:        0.3%{?dist}
-Summary:        Alibaba Cloud Debug function for Golang
+Release:        0.4%{?dist}
+Summary:        Alibaba Cloud (Aliyun) Debug function for Go
 
 # Upstream license specification: Apache-2.0
 License:        ASL 2.0
@@ -41,6 +41,9 @@ Source0:        %{gosource}
 %gopkgfiles
 
 %changelog
+* Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.4
+- Update summary and description for clarity and consistency
+
 * Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.3.20200728git9472017
 - Update to release 3 of git commit 9472017 (#1811173)
 - Enable check stage

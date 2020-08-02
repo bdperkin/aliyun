@@ -7,14 +7,14 @@ Version:                1.1.7
 %gometa
 
 %global common_description %{expand:
-Support for TEA OpenAPI DSL.}
+Alibaba Cloud (Aliyun) support for TEA OpenAPI DSL.}
 
 %global golicenses      LICENSE
 %global godocs          README-CN.md README.md
 
 Name:           %{goname}
-Release:        1%{?dist}
-Summary:        Support for TEA OpenAPI DSL
+Release:        2%{?dist}
+Summary:        Alibaba Cloud (Aliyun) support for TEA OpenAPI DSL
 
 # Upstream license specification: Apache-2.0
 License:        ASL 2.0
@@ -43,6 +43,9 @@ BuildRequires:  golang(golang.org/x/net/proxy)
 %gopkgfiles
 
 %changelog
+* Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 1.1.7-2
+- Update summary and description for clarity and consistency
+
 * Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 1.1.7-1
 - Update to version 1.1.7 (#1811174)
 - Enable check stage

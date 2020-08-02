@@ -10,14 +10,14 @@ Version:                1.6.18
 %gometa
 
 %global common_description %{expand:
-A user friendly command line tool to access AliCloud OSS.}
+Alibaba Cloud (Aliyun) Object Storage Service (OSS) CLI.}
 
 %global golicenses      LICENSE
 %global godocs          CHANGELOG.md README-CN.md README.md
 
 Name:           %{goname}
-Release:        2%{?dist}
-Summary:        A user friendly command line tool to access AliCloud OSS
+Release:        3%{?dist}
+Summary:        Alibaba Cloud (Aliyun) Object Storage Service (OSS) CLI
 
 License:        MIT
 URL:            %{gourl}
@@ -69,6 +69,9 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %gopkgfiles
 
 %changelog
+* Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 1.6.18-3
+- Update summary and description for clarity and consistency
+
 * Wed Jul 29 2020 Brandon Perkins <bperkins@redhat.com> - 1.6.18-2
 - Enable check stage
 - Disable 'lib' tests due to need for credentials

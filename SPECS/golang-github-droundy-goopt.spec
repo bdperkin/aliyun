@@ -7,15 +7,15 @@
 %gometa
 
 %global common_description %{expand:
-Getopt-like flags package for golang.}
+Getopt-like flags package for Go.}
 
 %global golicenses      LICENSE
 %global godocs          example README.md
 
 Name:           %{goname}
 Version:        0
-Release:        0.3%{?dist}
-Summary:        Getopt-like flags package for golang
+Release:        0.4%{?dist}
+Summary:        Getopt-like flags package for Go
 
 # Upstream license specification: BSD-2-Clause
 License:        BSD
@@ -41,6 +41,9 @@ Source0:        %{gosource}
 %gopkgfiles
 
 %changelog
+* Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.4
+- Update summary and description for clarity and consistency
+
 * Tue Jul 28 2020 Brandon Perkins <bperkins@redhat.com> - 0-0.3.20200728git0b8effe
 - Update to release 3 of git commit 0b8effe (#1811180)
 - Enable check stage
