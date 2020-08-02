@@ -1,4 +1,4 @@
-%bcond_with check
+%bcond_without check
 
 %global _hardened_build 1
 
@@ -31,7 +31,7 @@ Alibaba Cloud CLI.}
 %global godocs1         README.md
 
 Name:           %{goname}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        %{godevelsummary0}
 
 # Upstream license specification: Apache-2.0
@@ -103,7 +103,7 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 
 %if %{with check}
 %check
-%gocheck
+%gocheck -d 'openapi' -d 'oss/lib'
 %endif
 
 %files
@@ -116,6 +116,11 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %gopkgfiles
 
 %changelog
+* Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.55-2
+- Reenable check stage
+- Disable 'openapi' tests due to only being used by meta
+- Disable 'oss/lib' tests due to need for credentials
+
 * Sat Aug 01 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.55-1
 - Update to version 3.0.55 (#1811183)
 - Disable check stage temporarily
