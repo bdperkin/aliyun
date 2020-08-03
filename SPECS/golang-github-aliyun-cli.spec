@@ -2,6 +2,8 @@
 
 %global _hardened_build 1
 
+%global distprefix %{nil}
+
 # https://github.com/aliyun/aliyun-cli
 %global goipath0        github.com/aliyun/aliyun-cli
 Version:                3.0.55
@@ -10,8 +12,6 @@ Version:                3.0.55
 %global goipath1        github.com/aliyun/aliyun-openapi-meta
 %global version1        0
 %global commit1         fb1de10319cf130af8945963ef6659707b5f04b7
-%global gometarepo      aliyun-openapi-meta
-%global gometadir       %{gometarepo}-%{commit1}
 
 %gometa -a
 
@@ -28,10 +28,10 @@ Alibaba Cloud (Aliyun) CLI.}
                         README-cli.md README-CN-oss.md README-oss.md
 
 %global golicenses1     LICENSE
-%global godocs1         README.md
+%global godocs1         README-openapi-meta.md
 
 Name:           %{goname}
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        %{godevelsummary0}
 
 # Upstream license specification: Apache-2.0
@@ -42,7 +42,7 @@ Source1:        %{gosource1}
 
 Patch0:         aliyun-cli-credentials-config.patch
 
-BuildRequires:  go-bindata
+BuildRequires:  go-bindata >= 3.1.0
 BuildRequires:  golang(github.com/aliyun/alibaba-cloud-sdk-go/sdk)
 BuildRequires:  golang(github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials)
 BuildRequires:  golang(github.com/aliyun/alibaba-cloud-sdk-go/sdk/endpoints)
@@ -74,18 +74,21 @@ BuildRequires:  golang(gopkg.in/check.v1)
 %gopkg
 
 %prep
-%goprep -z 1
-%goprep -z 0
+%goprep -a
+cd %{gosourcedir}
 # https://github.com/aliyun/aliyun-cli/pull/300
 %patch0 -p1
 mv bin/README.md README-bin.md
 mv cli/README.md README-cli.md
 mv oss/README.md README-oss.md
 mv oss/README-CN.md README-CN-oss.md
-pushd %{gobuilddir}/src/%{goipath0}
-%global gometaabs       %{_builddir}/%{gometadir}
-go-bindata -o resource/metas.go -pkg resource -prefix %{gometaabs} %{gometaabs}/...
-popd
+mv %{_builddir}/%{extractdir1}/README.md %{_builddir}/%{extractdir1}/README-openapi-meta.md
+rm %{gobuilddir}/src/%{goipath0} %{gobuilddir}/src/%{goipath1}
+ln -fs %{_builddir}/%{extractdir1} %{_builddir}/aliyun-openapi-meta
+go-bindata -o resource/metas.go -pkg resource ../aliyun-openapi-meta/...
+rm %{_builddir}/aliyun-openapi-meta
+ln -fs %{_builddir}/%{extractdir0} %{gobuilddir}/src/%{goipath0}
+ln -fs %{_builddir}/%{extractdir1} %{gobuilddir}/src/%{goipath1}
 
 %build
 LDFLAGS="-X '%{goipath0}/cli.Version=%{version}'" 
@@ -99,23 +102,36 @@ install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 install -m 0755 -vd                                %{buildroot}%{_mandir}/man1
 install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
-%global buildsubdir %{gometadir}/_build/src/%{goipath0}
 
 %if %{with check}
 %check
+# Skip 'openapi' and 'oss/lib' tests due to need for credentials
 %gocheck -d 'openapi' -d 'oss/lib'
 %endif
 
 %files
-%license LICENSE
-%doc CHANGELOG.md README-CN.md README.md README-bin.md README-cli.md
-%doc README-CN-oss.md README-oss.md
+%license ../%{extractdir0}/LICENSE
+%doc ../%{extractdir0}/CHANGELOG.md
+%doc ../%{extractdir0}/README-CN.md     ../%{extractdir0}/README.md
+%doc ../%{extractdir0}/README-bin.md    ../%{extractdir0}/README-cli.md
+%doc ../%{extractdir0}/README-CN-oss.md ../%{extractdir0}/README-oss.md
+%doc ../%{extractdir1}/README-openapi-meta.md
 %{_mandir}/man1/aliyun.1*
 %{_bindir}/*
 
 %gopkgfiles
 
 %changelog
+* Mon Aug 03 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.55-4
+- Set distprefix to nil
+- Clean up unneeded globals
+- Rename openapi-meta README.md for proper inclusion
+- Requre new go-bindata
+- Use standard goprep
+- Prevent symbolic link infinite loops
+- New aliyun-openapi-meta paths
+- Added paths to %license and %doc in main package
+
 * Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.55-3
 - Update summary and description for clarity and consistency
 
