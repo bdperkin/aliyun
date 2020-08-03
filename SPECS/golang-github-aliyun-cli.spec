@@ -31,7 +31,7 @@ Alibaba Cloud (Aliyun) CLI.}
 %global godocs1         README-openapi-meta.md
 
 Name:           %{goname}
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        %{godevelsummary0}
 
 # Upstream license specification: Apache-2.0
@@ -42,7 +42,7 @@ Source1:        %{gosource1}
 
 Patch0:         aliyun-cli-credentials-config.patch
 
-BuildRequires:  go-bindata >= 3.1.0
+BuildRequires:  golang-github-shulhan-bindata
 BuildRequires:  golang(github.com/aliyun/alibaba-cloud-sdk-go/sdk)
 BuildRequires:  golang(github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials)
 BuildRequires:  golang(github.com/aliyun/alibaba-cloud-sdk-go/sdk/endpoints)
@@ -85,7 +85,7 @@ mv oss/README-CN.md README-CN-oss.md
 mv %{_builddir}/%{extractdir1}/README.md %{_builddir}/%{extractdir1}/README-openapi-meta.md
 rm %{gobuilddir}/src/%{goipath0} %{gobuilddir}/src/%{goipath1}
 ln -fs %{_builddir}/%{extractdir1} %{_builddir}/aliyun-openapi-meta
-go-bindata -o resource/metas.go -pkg resource ../aliyun-openapi-meta/...
+go-bindata.shulhan -o resource/metas.go -pkg resource ../aliyun-openapi-meta/...
 rm %{_builddir}/aliyun-openapi-meta
 ln -fs %{_builddir}/%{extractdir0} %{gobuilddir}/src/%{goipath0}
 ln -fs %{_builddir}/%{extractdir1} %{gobuilddir}/src/%{goipath1}
@@ -122,6 +122,9 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %gopkgfiles
 
 %changelog
+* Mon Aug 03 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.55-5
+- Use go-bindata.shulhan instead of go-bindata
+
 * Mon Aug 03 2020 Brandon Perkins <bperkins@redhat.com> - 3.0.55-4
 - Set distprefix to nil
 - Clean up unneeded globals

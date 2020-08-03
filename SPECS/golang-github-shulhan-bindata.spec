@@ -16,7 +16,7 @@ binary data in a Go program.}
 %global godocs          AUTHORS CHANGELOG CONTRIBUTING.md README.md
 
 Name:           %{goname}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A small utility which generates Go code from any file
 
 # Upstream license specification: CC0-1.0
@@ -25,15 +25,6 @@ URL:            %{gourl}
 Source0:        %{gosource}
 
 BuildRequires:  help2man
-
-# The upstream repository of the "go-bindata" package
-# (github.com/jteeuwen/go-bindata) has been archived
-# by the owner and is now read-only.  The upstream
-# repository of this "golang-github-shulhan-bindata"
-# package (github.com/shuLhan/go-bindata) has become
-# the de-facto source for the "go-bindata" command.
-Obsoletes:      go-bindata < 3.1.0
-Provides:       go-bindata = %{version}
 
 %description
 %{common_description}
@@ -44,9 +35,9 @@ Provides:       go-bindata = %{version}
 %goprep
 
 %build
-%gobuild -o %{gobuilddir}/bin/go-bindata %{goipath}/cmd/go-bindata
+%gobuild -o %{gobuilddir}/bin/go-bindata.shulhan %{goipath}/cmd/go-bindata
 mkdir -p %{gobuilddir}/share/man/man1
-help2man --no-discard-stderr -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man1/go-bindata.1 -N --version-string="%{version}" %{gobuilddir}/bin/go-bindata
+help2man --no-discard-stderr -n "%{summary}" -s 1 -o %{gobuilddir}/share/man/man1/go-bindata.shulhan.1 -N --version-string="%{version}" %{gobuilddir}/bin/go-bindata.shulhan
 
 %install
 %gopkginstall
@@ -63,12 +54,14 @@ install -m 0644 -vp %{gobuilddir}/share/man/man1/* %{buildroot}%{_mandir}/man1/
 %files
 %license LICENSE
 %doc AUTHORS CHANGELOG CONTRIBUTING.md README.md
-%{_mandir}/man1/go-bindata.1*
+%{_mandir}/man1/go-bindata.shulhan.1*
 %{_bindir}/*
 
 %gopkgfiles
 
 %changelog
+* Mon Aug 03 2020 Brandon Perkins <bperkins@redhat.com> - 3.6.0-2
+- Rename binary to go-bindata.shulhan so it does not conflict with go-bindata
+
 * Sun Aug 02 2020 Brandon Perkins <bperkins@redhat.com> - 3.6.0-1
-- Initial package
-- Obsoletes go-bindata package
+- Initial package (#1862861)
